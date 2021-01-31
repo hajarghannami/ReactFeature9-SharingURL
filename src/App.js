@@ -1,3 +1,7 @@
+import { Route, Switch } from "react-router";
+import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 // Styling
 import {
   Description,
@@ -5,6 +9,7 @@ import {
   ShopImage,
   ThemeButton,
   Title,
+  NavProduct,
 } from "./styles";
 import React, { useState } from "react";
 
@@ -38,44 +43,41 @@ function App() {
   const [_products, setProducts] = useState(products);
 
   const deleteProduct = (productId) => {
-    const updatedProducts = _products.filter(
-      (product) => product.id !== +productId
+    const keptProducts = _products.filter(
+      (product) => product.id !== productId
     );
-    setProducts(updatedProducts);
-    setProduct(null);
-  };
-
-  const selectProduct = (productId) => {
-    const selectedProduct = products.find(
-      (product) => product.id === productId
-    );
-    setProduct(selectedProduct);
+    setProducts(keptProducts);
   };
 
   const toggleTheme = () =>
     setCurrentTheme(currentTheme === "light" ? "dark" : "light");
 
-  const setView = () =>
-    product ? (
-      <ProductDetail
-        product={product}
-        deleteProduct={deleteProduct}
-        selectProduct={selectProduct}
-      />
-    ) : (
-      <ProductList
-        products={_products}
-        deleteProduct={deleteProduct}
-        selectProduct={selectProduct}
-      />
-    );
-
   return (
     <ThemeProvider theme={theme[currentTheme]}>
       <GlobalStyle />
+      <Link to="/">Go to Home</Link> <br></br>
+      <NavProduct to="/products">Go to Products</NavProduct>
       <NavBar currentTheme={currentTheme} toggleTheme={toggleTheme} />
-      <Home />
-      {setView()}
+      <Switch>
+        <Route exact path="/">
+          <Helmet>
+            <title>Home Page</title>
+          </Helmet>
+          <Home />
+        </Route>
+        <Route path="/products/:productSlug">
+          <Helmet>
+            <title>Product Detail Page</title>
+          </Helmet>
+          <ProductDetail products={products} />
+        </Route>
+        <Route path="/products">
+          <Helmet>
+            <title>Products Page</title>
+          </Helmet>
+          <ProductList products={_products} deleteProduct={deleteProduct} />
+        </Route>
+      </Switch>
     </ThemeProvider>
   );
 }

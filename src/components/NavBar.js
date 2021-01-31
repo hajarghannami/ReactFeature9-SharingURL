@@ -1,10 +1,13 @@
 // Styling
-import { ThemeButton } from "../styles";
+import { ThemeButton, Logo } from "../styles";
+import { Link } from "react-router-dom";
 
 const NavBar = (props) => {
   return (
     <nav className="navbar navbar-expand">
-      <h4 className="navbar-brand">add your logo</h4>
+      <Logo to="/">
+        <img src="https://image.flaticon.com/icons/png/512/614/614131.png" />
+      </Logo>
       <div className="navbar-nav ml-auto">
         <a className="nav-item" style={{ padding: "0.25em 1em" }}>
           Products
